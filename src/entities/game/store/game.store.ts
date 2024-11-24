@@ -1,5 +1,6 @@
-import { TGame } from '@/entities/game';
 import { create } from 'zustand';
+
+import { TGame } from '@/entities/game';
 import { EGameState } from '@/entities/game/model/game.model';
 
 type TGameStore = {

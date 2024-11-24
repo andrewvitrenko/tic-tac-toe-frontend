@@ -1,7 +1,10 @@
+import './globals.css';
+
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import './globals.css';
 import { FC, PropsWithChildren } from 'react';
+
+import { SocketProvider } from '@/features/socket';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -22,8 +25,10 @@ export const metadata: Metadata = {
 const RootLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <SocketProvider>{children}</SocketProvider>
       </body>
     </html>
   );
