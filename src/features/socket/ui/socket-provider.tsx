@@ -1,16 +1,21 @@
 'use client';
 
 import { FC, PropsWithChildren, useEffect } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 
-import { useGameStore } from '@/entities/game/store/game.store';
 import { socket } from '@/features/socket/config/socket.config';
 
 export const SocketProvider: FC<PropsWithChildren> = ({ children }) => {
-  const {} = useGameStore(useShallow((state) => ({ setGame: state.setGame })));
-
   useEffect(() => {
     socket.connect();
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+    socket.on('disconnect', (reason, description) => {
+      console.log('Disconnected from server', reason, description);
+    });
+    socket.on('connect_error', (error) => {
+      console.log('Connection error', error);
+    });
 
     return () => {
       socket.disconnect();

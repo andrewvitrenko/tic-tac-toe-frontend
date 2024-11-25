@@ -13,6 +13,6 @@ export type TGame = {
   updatedAt: string;
   state: EGameState;
   turn?: string;
-  cells: TCell[][];
+  cells: TCell[];
   players: TPlayer[];
 };

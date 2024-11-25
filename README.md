@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# Future improvements
+- add auth
+  - store token in cookies
+  - create page-protection component that will check for token and refresh it and automatically redirect to login
+  - add login and signup pages
+  - add auth token to ws requests
+  - add auth guards on be
+- add list of previous games to the home page
+- add game auth logic
+  - improve it so it works with page reloads

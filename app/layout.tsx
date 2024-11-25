@@ -5,6 +5,8 @@ import localFont from 'next/font/local';
 import { FC, PropsWithChildren } from 'react';
 
 import { SocketProvider } from '@/features/socket';
+import { Toaster } from '@/shared/ui/sonner';
+import { Page } from '@/shared/ui/page';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -28,7 +30,10 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SocketProvider>{children}</SocketProvider>
+        <Page>
+          <SocketProvider>{children}</SocketProvider>
+          <Toaster />
+        </Page>
       </body>
     </html>
   );
