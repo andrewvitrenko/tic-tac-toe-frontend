@@ -1,0 +1,1 @@
+export { PageProtection } from './provider';

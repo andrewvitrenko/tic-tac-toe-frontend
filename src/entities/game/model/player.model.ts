@@ -1,5 +1,10 @@
+import { TUser } from '@/entities/user';
+
+import { ECellValue } from './cell.model';
+
 export type TPlayer = {
   id: string;
   gameId: string;
-  socketId: string;
+  user: TUser;
+  symbol: ECellValue;
 };

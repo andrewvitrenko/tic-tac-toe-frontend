@@ -10,7 +10,7 @@ import { NewGame } from './ui/new-game';
 export const HomePage: FC = () => {
   return (
     <div className="flex size-full items-center justify-center">
-      <Card className="mx-auto max-w-md">
+      <Card className="max-w-md w-full">
         <CardHeader>
           <CardTitle className="text-center text-2xl">
             Welcome to Tic-Tac-Toe

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { FC } from 'react';
 
+import { PageProtection } from '@/features/page-protection';
 import { HomePage } from '@/views/home';
 
 export const metadata: Metadata = {
@@ -8,7 +9,11 @@ export const metadata: Metadata = {
 };
 
 const Home: FC = () => {
-  return <HomePage />;
+  return (
+    <PageProtection>
+      <HomePage />
+    </PageProtection>
+  );
 };
 
 export default Home;
