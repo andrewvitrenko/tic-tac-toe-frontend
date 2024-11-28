@@ -1,61 +1,96 @@
-import { UserPlus2Icon } from 'lucide-react';
+'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2, UserPlus2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { FC, memo, useCallback, useState } from 'react';
+import { FC, memo, useCallback } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/shared/ui/button';
 import {
-  GameCodeEnter,
-  TGameCodeEnterProps,
-} from '@/views/home/ui/game-code-enter';
-import { PlayerName, TPlayerNameProps } from '@/views/home/ui/player-name';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+} from '@/shared/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/shared/ui/form';
+import { Input } from '@/shared/ui/input';
+import { useJoinGame } from '@/views/home/api';
+
+import { formSchema } from './config/form.config';
+import { TJoinGameForm } from './model/form.model';
 
 export const JoinGame: FC = memo(() => {
+  const { mutateAsync } = useJoinGame();
+
   const router = useRouter();
 
-  const [gameCodeOpen, setGameCodeOpen] = useState(false);
-  const [playerNameOpen, setPlayerNameOpen] = useState(false);
+  const form = useForm<TJoinGameForm>({
+    resolver: zodResolver(formSchema),
+  });
 
-  const onJoinGame = useCallback(() => setGameCodeOpen(true), []);
-
-  const onGameCodeEnter: TGameCodeEnterProps['onSubmit'] = useCallback(
-    ({ code }) => {
-      console.log(code);
-      setGameCodeOpen(false);
-      setPlayerNameOpen(true);
-    },
-    [],
-  );
-
-  const onPlayerNameSubmit: TPlayerNameProps['onSubmit'] = useCallback(
-    ({ name }) => {
-      console.log(name);
+  const onSubmit: SubmitHandler<TJoinGameForm> = useCallback(
+    async ({ code }) => {
+      await mutateAsync(code);
       router.push('/game');
     },
-    [router],
+    [mutateAsync, router],
   );
 
   return (
-    <div className="flex-1">
-      <Button
-        onClick={onJoinGame}
-        size="lg"
-        className="w-full"
-        variant="secondary"
-      >
-        <UserPlus2Icon />
-        Join Game
-      </Button>
-      <GameCodeEnter
-        open={gameCodeOpen}
-        onOpenChange={setGameCodeOpen}
-        onSubmit={onGameCodeEnter}
-      />
-      <PlayerName
-        open={playerNameOpen}
-        onOpenChange={setPlayerNameOpen}
-        onSubmit={onPlayerNameSubmit}
-      />
-    </div>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="lg" className="flex-1" variant="secondary">
+          <UserPlus2Icon />
+          Join Game
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>Join Game</DialogHeader>
+        <DialogDescription>
+          Enter the game code your friend shared with you
+        </DialogDescription>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Code</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="overflow-hidden text-ellipsis whitespace-nowrap"
+                      placeholder="Enter the game code"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              name="code"
+              shouldUnregister
+            />
+            <Button
+              disabled={!form.formState.isValid || form.formState.isSubmitting}
+              className="w-full"
+              type="submit"
+            >
+              {form.formState.isSubmitting && (
+                <Loader2 className="animate-spin" />
+              )}
+              Submit
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 });
 JoinGame.displayName = 'JoinGame';

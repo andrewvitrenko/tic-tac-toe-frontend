@@ -2,6 +2,8 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { FC, PropsWithChildren } from 'react';
 
+import { UserContext } from '@/features/user-context';
+
 import { isTokenExpired } from './lib/is-token-expired';
 
 export const PageProtection: FC<PropsWithChildren> = ({ children }) => {
@@ -16,5 +18,5 @@ export const PageProtection: FC<PropsWithChildren> = ({ children }) => {
     redirect('/login');
   }
 
-  return children;
+  return <UserContext>{children}</UserContext>;
 };

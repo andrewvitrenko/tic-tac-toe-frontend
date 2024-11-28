@@ -1,16 +1,19 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { useShallow } from 'zustand/react/shallow';
 
-import { useUserStore } from '@/entities/user';
+import { UserApi } from '@/entities/user';
+import { EUsersApiKey } from '@/entities/user/api';
 
-import { UserApi } from './api';
-import { EUsersApiKey } from './model';
+import { useUserStore } from '../store';
 
 export const useGetMe = () => {
+  const router = useRouter();
+
   const { setUser } = useUserStore(
     useShallow((state) => ({ setUser: state.setUser })),
   );
@@ -23,8 +26,9 @@ export const useGetMe = () => {
   useEffect(() => {
     if (result.error) {
       toast.error(result.error.message);
+      router.push('/login');
     }
-  }, [result.error]);
+  }, [result.error, router]);
 
   useEffect(() => {
     if (result.data) {

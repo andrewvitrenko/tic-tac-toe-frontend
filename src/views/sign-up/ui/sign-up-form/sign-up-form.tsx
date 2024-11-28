@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { FC, memo, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -135,7 +135,12 @@ export const SignUpForm: FC = memo(() => {
           )}
           name="confirmPassword"
         />
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting || !form.formState.isValid}
+          className="w-full"
+        >
+          {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
           Submit
         </Button>
       </form>

@@ -1,50 +1,78 @@
-import { CirclePlusIcon } from 'lucide-react';
+import { CirclePlusIcon, Copy, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { FC, memo, useCallback, useState } from 'react';
-import { useShallow } from 'zustand/react/shallow';
+import { toast } from 'sonner';
 
-import { useGameStore } from '@/entities/game/store/game.store';
 import { Button } from '@/shared/ui/button';
-import { GameCodeCopy } from '@/views/home/ui/game-code-copy';
-import { PlayerName, TPlayerNameProps } from '@/views/home/ui/player-name';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/ui/dialog';
+import { Input } from '@/shared/ui/input';
+import { useCreateGame } from '@/views/home/api';
 
 export const NewGame: FC = memo(() => {
-  const { game } = useGameStore(useShallow((state) => ({ game: state.game })));
+  // 1. create game
+  // 2. open dialog
+  // 3. add game id route param
+  // 4. add game provider
+
+  const { isSuccess, mutate, isPending, data } = useCreateGame();
+
+  const [copied, setCopied] = useState(false);
 
   const router = useRouter();
 
-  const [playerNameOpen, setPlayerNameOpen] = useState(false);
-  const [gameCodeOpen, setGameCodeOpen] = useState(false);
+  const onCopyClick = useCallback(async () => {
+    if (!data?.id) return;
 
-  const onSubmit: TPlayerNameProps['onSubmit'] = useCallback(({ name }) => {
-    console.log(name);
-    setPlayerNameOpen(false);
-    setGameCodeOpen(true);
-  }, []);
+    await navigator.clipboard.writeText(data.id);
+    setCopied(true);
+    toast.success('Copied to clipboard', { position: 'bottom-center' });
+  }, [data?.id]);
 
-  const onGameStart = useCallback(() => {
-    router.push('/game');
-  }, [router]);
+  const onContinueClick = useCallback(() => router.push('/game'), [router]);
 
-  const onNewGameClick = useCallback(() => setPlayerNameOpen(true), []);
+  const onCreateGame = useCallback(() => mutate(), [mutate]);
 
   return (
-    <div className="flex-1">
-      <Button onClick={onNewGameClick} className="w-full" size="lg">
-        <CirclePlusIcon /> New game
-      </Button>
-      <PlayerName
-        open={playerNameOpen}
-        onOpenChange={setPlayerNameOpen}
-        onSubmit={onSubmit}
-      />
-      <GameCodeCopy
-        code={game.id}
-        open={gameCodeOpen}
-        onOpenChange={setGameCodeOpen}
-        onContinueClick={onGameStart}
-      />
-    </div>
+    <Dialog open={isSuccess}>
+      <DialogTrigger asChild>
+        <Button className="flex-1" disabled={isPending} onClick={onCreateGame} size="lg">
+          {isPending ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <CirclePlusIcon />
+          )}{' '}
+          New game
+        </Button>
+      </DialogTrigger>
+      <DialogContent disableClose>
+        <DialogHeader>
+          <DialogTitle>Game code</DialogTitle>
+          <DialogDescription>
+            Send this code to the person you want to play with.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex gap-4">
+          <Input
+            id="code"
+            defaultValue={data?.id}
+            className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap"
+          />
+          <Button size="icon" onClick={onCopyClick} className="h-full shrink-0">
+            <Copy />
+          </Button>
+        </div>
+        <Button disabled={!copied} onClick={onContinueClick}>
+          Continue
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 });
 NewGame.displayName = 'NewGame';
