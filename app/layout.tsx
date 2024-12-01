@@ -5,7 +5,6 @@ import localFont from 'next/font/local';
 import { FC, PropsWithChildren } from 'react';
 
 import { ReactQueryProvider } from '@/features/react-query';
-import { SocketProvider } from '@/features/socket';
 import { Page } from '@/shared/ui/page';
 import { Toaster } from '@/shared/ui/sonner';
 
@@ -32,9 +31,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Page>
-          <ReactQueryProvider>
-            <SocketProvider>{children}</SocketProvider>
-          </ReactQueryProvider>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
           <Toaster />
         </Page>
       </body>

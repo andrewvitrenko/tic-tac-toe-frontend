@@ -1,6 +1,0 @@
-export enum EMessageType {
-  CREATE_GAME = 'CREATE_GAME',
-  JOIN_GAME = 'JOIN_GAME',
-  MAKE_MOVE = 'MAKE_MOVE',
-  GAME_OVER = 'GAME_OVER',
-}

@@ -40,7 +40,7 @@ export const JoinGame: FC = memo(() => {
   const onSubmit: SubmitHandler<TJoinGameForm> = useCallback(
     async ({ code }) => {
       await mutateAsync(code);
-      router.push('/game');
+      router.push(`/game/${code}`);
     },
     [mutateAsync, router],
   );

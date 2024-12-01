@@ -35,14 +35,23 @@ export const NewGame: FC = memo(() => {
     toast.success('Copied to clipboard', { position: 'bottom-center' });
   }, [data?.id]);
 
-  const onContinueClick = useCallback(() => router.push('/game'), [router]);
+  const onContinueClick = useCallback(() => {
+    if (!data?.id) return;
+
+    router.push(`/game/${data.id}`);
+  }, [router, data?.id]);
 
   const onCreateGame = useCallback(() => mutate(), [mutate]);
 
   return (
     <Dialog open={isSuccess}>
       <DialogTrigger asChild>
-        <Button className="flex-1" disabled={isPending} onClick={onCreateGame} size="lg">
+        <Button
+          className="flex-1"
+          disabled={isPending}
+          onClick={onCreateGame}
+          size="lg"
+        >
           {isPending ? (
             <Loader2 className="animate-spin" />
           ) : (

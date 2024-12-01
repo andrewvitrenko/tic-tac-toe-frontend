@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { FC } from 'react';
 
+import { PageProtection } from '@/features/page-protection';
 import { GamePage } from '@/views/game';
 
 export const metadata: Metadata = {
@@ -8,7 +9,11 @@ export const metadata: Metadata = {
 };
 
 const Game: FC = () => {
-  return <GamePage />;
+  return (
+    <PageProtection>
+      <GamePage />
+    </PageProtection>
+  );
 };
 
 export default Game;

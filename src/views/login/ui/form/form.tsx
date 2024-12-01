@@ -93,10 +93,10 @@ export const LoginForm: FC = memo(() => {
         />
         <Button
           type="submit"
-          disabled={form.formState.isSubmitting || !form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || !form.formState.isValid}
           className="w-full"
         >
-          {isPending && <Loader2 className="animate-spin" />}
+          {form.formState.isSubmitting && <Loader2 className="animate-spin" />}
           Submit
         </Button>
       </form>
