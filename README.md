@@ -1,6 +1,6 @@
-<h1 style="text-align: center">Tic Tac Toe</h1>
+# Tic Tac Toe
 
-<p>This repo is a front-end part of the application. The back-end part can be found <a href="https://github.com/andrewvitrenko/tic-tac-toe-backend">here</a>.</p>
+This repo is a front-end part of the application. The back-end part can be found [here](https://github.com/andrewvitrenko/tic-tac-toe-backend).
 
 ## Introduction
 
